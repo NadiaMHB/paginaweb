@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <!-- Required meta tags -->
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+   <meta content="Codescandy" name="author" />
+   <meta name="_csrf" th:content="${_csrf.token}" />
+   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+   <title>Shop Checkout eCommerce HTML Template - FreshCart</title>
+   <!-- Favicon icon-->
+   <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+
+
+   <!-- Libs CSS -->
+   <link th:href="@{/libs/bootstrap-icons/font/bootstrap-icons.min.css}" rel="stylesheet">
+   <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+   <link th:href="@{/libs/simplebar/dist/simplebar.min.css}" rel="stylesheet">
+
+   <!-- Theme CSS -->
+   <link rel="stylesheet" th:href="@{/css/theme.min.css}">
+
+   <!-- Flag Icons -->
+   <!-- Incluir la hoja de estilos de Font Awesome -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">      <style>
+   #cvv-eye-toggle {
+      cursor: pointer;
+      color: #999;
+   }
+
+   #cvv-eye-toggle:hover {
+      color: #333;
+   }
+   /* Contenedor de la tarjeta para asegurar que siempre esté centrada */
+   #unique-card-preview {
+      display: flex;
+      justify-content: center;
+      align-items: center; /* Centra verticalmente la tarjeta */
+      height: 200px; /* Asegura que el contenedor tenga suficiente altura para la tarjeta */
+      margin-bottom: 20px;
+      perspective: 1000px;
+      position: relative;
+   }
+
+   #unique-card-front, #unique-card-back {
+      width: 300px;
+      height: 180px;
+      background: linear-gradient(135deg, #3b3b3b, #2a2a2a);
+      border-radius: 15px;
+      padding: 20px;
+      color: white;
+      position: absolute; /* Se asegura que tanto la parte frontal como la trasera estén en la misma posición */
+      backface-visibility: hidden;
+      transition: transform 0.6s;
+   }
+
+   #unique-card-back {
+      transform: rotateY(180deg);
+   }
+
+   #unique-card-chip {
+      width: 50px;
+      height: 40px;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+   }
+
+   #unique-card-chip img {
+      width: 100%;
+      height: 100%;
+   }
+
+   #unique-card-number {
+      font-size: 20px;
+      letter-spacing: 2px;
+      margin-top: 40px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+   }
+
+   #unique-card-name {
+      font-size: 14px;
+      text-align: left;
+      margin-top: 20px;
+   }
+
+   #unique-card-expiry {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 14px;
+   }
+
+   #unique-card-cvv-back {
+      text-align: right;
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+   }
+
+   #unique-card-preview.flipped #unique-card-front {
+      transform: rotateY(180deg);
+   }
+
+   #unique-card-preview.flipped #unique-card-back {
+      transform: rotateY(0deg);
+   }
+
+   /* Estilos únicos para el grupo de input del CVV */
+   #unique-input-group-cvv {
+      position: relative;
+   }
+
+   #unique-input-group-cvv .btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+   }
+
+   #unique-input-group-cvv .btn i {
+      font-size: 18px;
+      color: #999;
+   }
+
+   #chipsContainer {
+      visibility: visible !important;
+      opacity: 1;
+   }
+
+   .selectable-chip {
+      visibility: visible !important;
+      opacity: 1 !important;
+      background-color: #f8f9fa;
+      color: #212529;
+      transition: background-color 0.3s, color 0.3s;
+   }
+   .selectable-chip.selected {
+      background-color: #007bff !important;
+      color: white !important;
+   }
+
+
+</style>
+</head>
+
+<body>
+
+<script th:src="@{/js/vendors/validation.js}"></script>
+
+<main>
+
+   <!-- section-->
+   <div class="mt-4">
+      <div class="container">
+         <!-- row -->
+         <div class="row">
+            <!-- col -->
+            <div class="col-12">
+               <!-- breadcrumb -->
+               <nav class="navbar navbar-light" style="border-bottom: 2px solid #959ea9; padding: 10px;">
+                  <div class="container d-flex justify-content-between align-items-center">
+                     <a class="navbar-brand" th:href="@{/UsuarioFinal/pagPrincipal}">
+                        <img th:src="@{/images/logo/logoGTICS.jpeg}"  width="220" height="auto" class="d-inline-block align-top" alt="Logo de la Empresa">
+                     </a>
+                     <!-- Botón Regresar alineado correctamente -->
+                     <a th:href="@{/UsuarioFinal/pagPrincipal}" class="btn btn-secondary">Regresar</a>
+                  </div>
+               </nav>
+
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- section -->
+   <section class="mb-lg-14 mb-8 mt-8">
+      <div class="container">
+         <!-- row -->
+         <div class="row">
+            <!-- col -->
+            <div class="col-12">
+               <div>
+                  <div class="mb-8">
+                     <!-- text -->
+                     <h1 class="fw-bold mb-0">Proceso de pago</h1>
+
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div>
+            <!-- row -->
+            <div class="row">
+               <div class="col-xl-7 col-lg-6 col-md-12">
+                  <!-- accordion -->
+                  <div class="accordion accordion-flush" id="accordionFlushExample">
+                     <!-- Dirección de Envío -->
+                     <div class="accordion-item py-4">
+                        <a href="#" class="text-inherit h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
+                           <i class="feather-icon icon-map-pin me-2 text-muted"></i>
+                           Dirección de envío
+                        </a>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse show">
+                           <div class="mt-5">
+                              <div class="row">
+                                 <div>
+                                    <strong th:text="${user.nombre}"></strong><br />
+                                    <span th:text="${user.direccion}"></span>,
+                                    <span th:text="${user.distrito.nombre}">Distrito</span>,
+                                    <span th:text="${user.zona.nombreZona}">Zona</span>,
+                                    <span th:text="${user.distrito.nombre}">Distrito</span><br />
+                                    <span class="text-muted small" th:text="${user.telefono}"></span>
+                                 </div>
+                                 <div class="mt-3">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">Editar Dirección</button>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- Tiempo de Entrega -->
+                     <div class="accordion-item py-4">
+                        <a href="#" class="text-inherit h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo">
+                           <i class="feather-icon icon-clock me-2 text-muted"></i>
+                           Tiempo aproximado del delivery
+                        </a>
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse">
+                           <div class="alert alert-info mt-3" role="alert">
+                              <i class="feather-icon icon-info me-2"></i>
+                              La fecha de entrega es una estimación y puede variar según las condiciones de envío.
+                           </div>
+                           <div class="p-4">
+                              <div class="d-flex justify-content-between align-items-center">
+                                 <div>
+                                    <h6 class="mb-1">Fecha estimada de entrega</h6>
+                                    <p class="text-muted mb-0">
+                                       <strong th:text="${fechaEnvioEstimada}">Fecha de Entrega</strong>
+                                    </p>
+                                 </div>
+                                 <span class="badge bg-primary">Estimación</span>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- Comentarios Adicionales -->
+                     <div class="accordion-item py-4">
+                        <a href="#" class="text-inherit h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree">
+                           <i class="feather-icon icon-shopping-bag me-2 text-muted"></i>
+                           Comentarios adicionales
+                        </a>
+                        <div id="flush-collapseThree" class="accordion-collapse collapse">
+                           <div class="mt-5">
+                              <label for="DeliveryInstructions" class="form-label">Instrucciones para el delivery</label>
+                              <textarea class="form-control" id="DeliveryInstructions" rows="3" placeholder="Escribe las instrucciones para la entrega"></textarea>
+                              <p class="form-text">Añade instrucciones sobre cómo desean que sea tratada su orden en el proceso de entrega</p>
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- Método de Pago -->
+                     <div class="accordion-item py-4">
+                        <a href="#" class="text-inherit h5" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour">
+                           <i class="feather-icon icon-credit-card me-2 text-muted"></i>
+                           Métodos de pago
+                        </a>
+                        <div id="flush-collapseFour" class="accordion-collapse collapse">
+                           <div class="mt-5">
+                              <div class="card card-bordered shadow-none mb-2">
+                                 <div class="card-body p-6">
+                                    <div class="d-flex">
+                                       <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="metodoPago" id="cardPaymentRadio" data-bs-toggle="modal" data-bs-target="#addCardModal" />
+                                       </div>
+                                       <div>
+                                          <h5 class="mb-1 h6">Tarjeta de crédito/débito</h5>
+                                          <p class="mb-0 small">Transferencia de dinero segura utilizando su cuenta bancaria.</p>
+                                          <ul class="list-inline mb-0">
+                                             <li class="list-inline-item">
+                                                <img th:src="@{/images/payment/american-express.svg}" alt="American Express" />
+                                             </li>
+                                             <li class="list-inline-item">
+                                                <img th:src="@{/images/payment/mastercard.svg}" alt="Mastercard" />
+                                             </li>
+                                             <li class="list-inline-item">
+                                                <img th:src="@{/images/payment/visa.svg}" alt="Visa" />
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="col-md-12 offset-xl-1 col-xl-4 col-lg-6">
+                     <div class="mt-4 mt-lg-0">
+                        <div class="card shadow-sm">
+                           <h5 class="px-6 py-4 bg-transparent mb-0">Resumen de la compra</h5>
+                           <ul class="list-group list-group-flush">
+                              <!-- list group item -->
+                              <li th:each="producto : ${productosCarrito}" class="list-group-item px-4 py-3">
+                                 <div class="row align-items-center">
+                                    <div class="col-2 col-md-2">
+                                       <img th:src="${productoImagenUrls[producto.idProducto]}" alt="Producto" class="img-fluid" />
+                                    </div>
+                                    <div class="col-5 col-md-5">
+                                       <h6 class="mb-0" th:text="${producto.nombreProducto}">Nombre del producto</h6>
+                                    </div>
+                                    <div class="col-2 col-md-2 text-center text-muted">
+                                       <span th:text="${producto.cantidadProducto}">1</span>
+                                    </div>
+                                    <div class="col-3 text-lg-end text-start text-md-end col-md-3">
+                                       <span class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(producto.precioTotalPorProducto, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</span>
+                                    </div>
+                                 </div>
+                              </li>
+
+                              <!-- list group item -->
+                              <li class="list-group-item px-4 py-3">
+                                 <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div>Subtotal</div>
+                                    <div class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(subtotal, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</div>
+                                 </div>
+                                 <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                       Costo de envío
+                                       <i class="feather-icon icon-info text-muted" data-bs-toggle="tooltip" title="Tarifa de envío adicional. Puede variar según el destino"></i>
+                                    </div>
+                                    <div class="fw-bold" th:text="'S/. ' + ${#numbers.formatDecimal(costoEnvio, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</div>
+                                 </div>
+                              </li>
+                              <!-- list group item -->
+                              <li class="list-group-item px-4 py-3">
+                                 <div class="d-flex align-items-center justify-content-between fw-bold">
+                                    <div>Total</div>
+                                    <div th:text="'S/. ' + ${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')}">S/. 0.00</div>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+   </section>
+</main>
+
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-body p-6">
+            <form th:action="@{/UsuarioFinal/editarDireccion}" method="post" id="editAddressForm">
+               <!-- Cambiar el campo de identificación si es necesario -->
+               <input type="hidden" id="editDireccionId" name="direccionId" value="${user.direccion}" />
+
+               <div class="d-flex justify-content-between mb-5">
+                  <h5 class="h6 mb-1" id="editModalLabel">Editar dirección</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+
+               <div class="row g-3">
+                  <!-- Teléfono -->
+                  <div class="col-12">
+                     <label for="telefonoEdit" class="form-label">Teléfono</label>
+                     <input type="tel" class="form-control" id="telefonoEdit" name="telefono" required value="${user.telefoon}">
+                  </div>
+
+                  <!-- Zona -->
+                  <div class="col-12">
+                     <label for="zonaEdit" class="form-label">Zona</label>
+                     <select id="zonaEdit" name="zonaId" class="form-select" required>
+                        <option value="" disabled selected hidden>Selecciona una zona</option>
+                        <!-- Aquí llenamos las zonas desde el modelo -->
+                        <option th:each="zona : ${zonas}" th:value="${zona.id}" th:text="${zona.nombreZona}"
+                                th:selected="${zona.id == user.zona.nombreZona}"></option>
+                     </select>
+                  </div>
+
+                  <!-- Distrito -->
+                  <div class="col-12">
+                     <label for="distritoEdit" class="form-label">Distrito</label>
+                     <select id="distritoEdit" name="distritoId" class="form-select" required>
+                        <option value="" disabled selected hidden>Selecciona un distrito</option>
+                        <!-- Dependiendo de la zona seleccionada, puedes llenar los distritos dinámicamente con JavaScript -->
+                     </select>
+                  </div>
+
+                  <!-- Dirección -->
+                  <div class="col-12">
+                     <label for="direccionEdit" class="form-label">Dirección</label>
+                     <input type="text" class="form-control" id="direccionEdit" name="direccion" required value="${user.direccion}">
+                  </div>
+
+                  <!-- RUC (Opcional) -->
+                  <div class="col-12">
+                     <label for="rucEdit" class="form-label">Número de RUC (Opcional)</label>
+                     <input type="text" class="form-control" id="rucEdit" name="ruc" value="${user.agtRuc}">
+                  </div>
+
+                  <!-- Botones -->
+                  <div class="col-12 text-end">
+                     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</button>
+                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+         <div class="modal-body p-6">
+            <div class="d-flex justify-content-between mb-5">
+               <!-- heading -->
+               <div>
+                  <h5 class="h6 mb-1" id="addAddressModalLabel">Añadir una nueva tarjeta</h5>
+                  <p class="small mb-0 d-inline-block me-2">Lista de tarjetas válidas:</p>
+                  <!-- Lista de tarjetas -->
+                  <ul class="list-inline mb-0 d-inline-block">
+                     <li class="list-inline-item">
+                        <a href="#!"><img src="../images/payment/american-express.svg" alt="" /></a>
+                     </li>
+                     <li class="list-inline-item">
+                        <a href="#!"><img src="../images/payment/mastercard.svg" alt="" /></a>
+                     </li>
+                     <li class="list-inline-item">
+                        <a href="#!"><img src="../images/payment/visa.svg" alt="" /></a>
+                     </li>
+                  </ul>
+               </div>
+               <div>
+                  <!-- button -->
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+            </div>
+
+            <!-- Vista previa de la tarjeta -->
+            <div id="unique-card-preview" class="card-preview">
+               <div id="unique-card-front" class="card-front">
+                  <div id="unique-card-chip" class="card-chip">
+                     <img src="../images/products/chip.png" alt="Imagen de la tarjeta">
+                  </div>
+                  <div id="unique-card-number" class="card-number">**** **** **** ****</div>
+                  <div id="unique-card-expiry" class="card-expiry">
+                     <span id="unique-card-expiry-month">MM</span>/<span id="unique-card-expiry-year">AA</span>
+                  </div>
+                  <div id="unique-card-name" class="card-name">NOMBRE DEL TITULAR</div>
+
+
+               </div>
+               <div id="unique-card-back" class="card-back">
+                  <div id="unique-card-cvv-back" class="card-cvv-back">
+                     <span id="unique-cvv-back-display">***</span>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Formulario para ingresar los datos de la tarjeta -->
+            <div class="row g-2">
+               <div class="col-md-6 col-12">
+                  <div class="mb-3">
+                     <label for="unique-card-number-input" class="form-label">Número de tarjeta</label>
+                     <input type="text" class="form-control" id="unique-card-number-input" placeholder="xxxx-xxxx-xxxx-xxxx" required maxlength="19" inputmode="numeric" />
+                  </div>
+               </div>
+
+               <div class="col-md-6 col-12">
+                  <div class="mb-3">
+                     <label class="form-label" for="unique-nameoncard">Nombre del titular de la tarjeta</label>
+                     <input type="text" class="form-control" placeholder="Ingrese nombre" id="unique-nameoncard" />
+                  </div>
+               </div>
+
+               <div class="col-md-6 col-6">
+                  <div class="mb-3 mb-lg-0">
+                     <label class="form-label" for="unique-expiry-month">Fecha de expiración</label>
+                     <div class="d-flex">
+                        <select class="form-select" id="unique-expiry-month">
+                           <option value="" selected disabled hidden>MM</option>
+                           <option value="01">01</option>
+                           <option value="02">02</option>
+                           <option value="03">03</option>
+                        </select>
+                        <span class="mx-1">/</span>
+                        <select class="form-select" id="unique-expiry-year">
+                           <option value="" selected disabled hidden>YY</option>
+                           <option value="2024">2024</option>
+                           <option value="2025">2025</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="col-md-6 col-6">
+                  <div class="mb-3 mb-lg-0">
+                     <label for="unique-cvv-input" class="form-label">Código CVV</label>
+                     <div id="unique-input-group-cvv" class="input-group">
+                        <input type="password" class="form-control" id="unique-cvv-input" placeholder="xxx" maxlength="3" inputmode="numeric" required />
+                        <span class="input-group-text" id="cvv-eye-toggle" style="cursor: pointer;">
+                                    <i class="fa fa-eye"></i>
+                                </span>
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+
+            <div class="col-12 text-center mt-3">
+               <button class="btn btn-primary" type="button">Guardar y confirmar</button>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<script>
+   document.getElementById('zona').addEventListener('change', function () {
+      const zonaId = this.value;
+      const distritoSelect = document.getElementById('distrito');
+      distritoSelect.innerHTML = '<option value="" disabled selected>Loading...</option>';
+
+      fetch(`/UsuarioFinal/distritos/${zonaId}`)
+              .then(response => response.json())
+              .then(data => {
+                 distritoSelect.innerHTML = '<option value="" disabled selected>Selecciona un distrito</option>';
+                 data.forEach(distrito => {
+                    const option = document.createElement('option');
+                    option.value = distrito.id;
+                    option.textContent = distrito.nombre;
+                    distritoSelect.appendChild(option);
+                 });
+              })
+              .catch(err => console.error('Error:', err));
+   });
+</script>
+
+<!-- Footer -->
+
+<!-- JavaScript para el formateo automático del número de tarjeta -->
+<script>
+   document.getElementById('card-number2').addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\D/g, ''); // Elimina cualquier caracter que no sea un número
+      let formattedValue = '';
+
+      // Agrupa los números en bloques de 4 separados por guiones
+      for (let i = 0; i < value.length; i += 4) {
+         if (i > 0) formattedValue += '-';
+         formattedValue += value.substr(i, 4);
+      }
+
+      e.target.value = formattedValue;
+   });
+</script>
+<!-- Javascript-->
+<script>
+   document.getElementById('unique-card-number-input').addEventListener('input', function () {
+      var month = document.getElementById('unique-expiry-month').value;
+      var year = document.getElementById('unique-expiry-year').value;
+      var currentYear = new Date().getFullYear().toString().slice(-2); // Obtener los dos últimos dígitos del año actual
+      var currentMonth = new Date().getMonth() + 1; // Mes actual
+
+      if (parseInt(year) < parseInt(currentYear) || (year === currentYear && parseInt(month) < currentMonth)) {
+         alert('La tarjeta ha expirado o la fecha es inválida.');
+         // Puedes mostrar un mensaje o marcar el campo como inválido
+      }
+   });
+
+   document.getElementById('save-card-btn').addEventListener('click', function () {
+      const numeroTarjeta = document.getElementById('unique-card-number-input').value.replace(/\D/g, '');
+      const mesExpiracion = document.getElementById('unique-expiry-month').value;
+      const anioExpiracion = document.getElementById('unique-expiry-year').value;
+      const nombreTitular = document.getElementById('unique-nameoncard').value;
+
+      fetch('/usuario-final/guardar-tarjeta', {
+         method: 'POST',
+         body: new URLSearchParams({
+            numeroTarjeta: numeroTarjeta,
+            mesExpiracion: mesExpiracion,
+            anioExpiracion: anioExpiracion,
+            nombreTitular: nombreTitular
+         }),
+         headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+         }
+      })
+              .then(response => response.text())
+              .then(data => {
+                 alert(data);  // Mostrar el mensaje de éxito con la ID de la tarjeta
+                 // Aquí podrías actualizar la interfaz de usuario para mostrar los últimos 4 dígitos de la tarjeta
+              })
+              .catch(error => {
+                 alert('Error al guardar la tarjeta');
+              });
+   });
+
+   document.getElementById('pay-btn').addEventListener('click', function () {
+      const tarjetaId = 123; // Aquí debes obtener la ID de la tarjeta almacenada previamente (por ejemplo, desde un valor oculto o la UI)
+
+      fetch('/usuario-final/validar-tarjeta', {
+         method: 'POST',
+         body: new URLSearchParams({
+            tarjetaId: tarjetaId
+         }),
+         headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+         }
+      })
+              .then(response => response.text())
+              .then(data => {
+                 alert(data);  // Mostrar el resultado del pago
+              })
+              .catch(error => {
+                 alert('Error al validar la tarjeta');
+              });
+   });
+</script>
+<script th:src="@{/libs/flatpickr/dist/flatpickr.min.js}"></script>
+<!-- Libs JS -->
+<!-- <script src="../assets/libs/jquery/dist/jquery.min.js"></script> -->
+<script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+
+<!-- Theme JS -->
+<script th:src="@{/js/theme.min.js}"></script>
+
+<script th:src="@{/libs/imask/dist/imask.min.js}"></script>
+<script th:src="@{/js/vendors/inputmask.js}"></script>
+
+<script>
+   document.getElementById('unique-card-number-input').addEventListener('input', function () {
+      const cardNumber = this.value.replace(/\D/g, '').slice(0, 16);
+      this.value = cardNumber.replace(/(\d{4})(?=\d)/g, '$1-');
+      document.getElementById('unique-card-number').innerText = cardNumber.padEnd(16, '*').replace(/(\d{4})(?=\d)/g, '$1 ');
+   });
+
+   document.getElementById('unique-nameoncard').addEventListener('input', function () {
+      const cardName = this.value.toUpperCase();
+      document.getElementById('unique-card-name').innerText = cardName || 'NOMBRE DEL TITULAR';
+   });
+
+   document.getElementById('unique-expiry-month').addEventListener('change', function () {
+      const month = this.value;
+      document.getElementById('unique-card-expiry-month').innerText = month || 'MM';
+   });
+
+   document.getElementById('unique-expiry-year').addEventListener('change', function () {
+      const year = this.value.slice(2);
+      document.getElementById('unique-card-expiry-year').innerText = year || 'AA';
+   });
+
+   const cvvInput = document.getElementById('unique-cvv-input');
+   const cvvDisplay = document.getElementById('unique-cvv-back-display');
+   const eyeToggle = document.getElementById('cvv-eye-toggle');
+
+   eyeToggle.addEventListener('click', function () {
+      if (cvvInput.type === 'password') {
+         // Mostrar el CVV
+         cvvInput.type = 'text';
+         cvvDisplay.innerText = cvvInput.value || '***';
+         // Mostrar el icono del ojo sin tachar
+         eyeToggle.innerHTML = '<i class="fa fa-eye"></i>';
+      } else {
+         // Ocultar el CVV
+         cvvInput.type = 'password';
+         cvvDisplay.innerText = '***';
+         // Mostrar el icono del ojo tachado
+         eyeToggle.innerHTML = '<i class="fa fa-eye-slash"></i>';
+      }
+   });
+
+   cvvInput.addEventListener('input', function () {
+      const cvv = this.value;
+      cvvDisplay.innerText = cvv || '***';
+   });
+
+   cvvInput.addEventListener('focus', function () {
+      document.getElementById('unique-card-preview').classList.add('flipped');
+   });
+
+   cvvInput.addEventListener('blur', function () {
+      document.getElementById('unique-card-preview').classList.remove('flipped');
+   });
+</script>
+<script>
+   document.getElementById('selectZona').addEventListener('change', function () {
+      var zonaId = this.value;
+      var distritoSelect = document.getElementById('selectDistrito');
+
+      // Limpiamos el select de distritos
+      distritoSelect.innerHTML = '<option value="" selected disabled hidden>Distrito</option>';
+
+      // Llamamos a la API para obtener los distritos de la zona seleccionada
+      fetch('/UsuarioFinal/distritos/' + zonaId)
+              .then(response => response.json())
+              .then(distritos => {
+                 // Iteramos sobre los distritos y los agregamos al select
+                 distritos.forEach(distrito => {
+                    var option = document.createElement('option');
+                    option.value = distrito.id;
+                    option.textContent = distrito.nombre;
+                    distritoSelect.appendChild(option);
+                 });
+              })
+              .catch(error => console.error('Error al cargar los distritos:', error));
+   });
+
+</script>
+
+
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.selectable-chip').forEach(function(chip) {
+         chip.style.visibility = 'visible';
+         chip.style.opacity = '1';
+      });
+   });
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+</body>
+</html>
